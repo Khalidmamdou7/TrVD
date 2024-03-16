@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from clean_gadget import clean_gadget
+import os
 
 def normalization(source):
     nor_code = []
@@ -21,18 +22,20 @@ def normalization(source):
 
 
 def mutrvd():
-    train = pd.read_pickle('trvd_train.pkl')
-    test = pd.read_pickle('trvd_test.pkl')
-    val = pd.read_pickle('trvd_val.pkl')
+    train = pd.read_pickle('./dataset/trvd_train.pkl')
+    test = pd.read_pickle('./dataset/trvd_test.pkl')
+    val = pd.read_pickle('./dataset/trvd_val.pkl')
 
     train['code'] = normalization(train)
-    train.to_pickle('./mutrvd/train.pkl')
+    if not os.path.exists('./dataset/mutrvd'):
+        os.makedirs('./dataset/mutrvd')
+    train.to_pickle('./dataset/mutrvd/train.pkl')
 
     test['code'] = normalization(test)
-    test.to_pickle('./mutrvd/test.pkl')
+    test.to_pickle('./dataset/mutrvd/test.pkl')
 
     val['code'] = normalization(val)
-    val.to_pickle('./mutrvd/val.pkl')
+    val.to_pickle('./dataset/mutrvd/val.pkl')
 
 
 if __name__ == '__main__':

@@ -18,9 +18,8 @@ pip install -r requirements.txt
 
 ### Step 0.1: Prepare the dataset
 ```bash
-unzip ./dataset/dataset.zip -d ./dataset
+unzip ./dataset/dataset.zip -d ./
 python3 ./partition_data.py
-mkdir ./dataset/mutrvd
 ```
 
 ### Step1:Code normalization

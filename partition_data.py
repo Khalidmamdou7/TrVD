@@ -14,11 +14,11 @@ train_data, temp_data = train_test_split(dataset, test_size=0.2, random_state=42
 val_data, test_data = train_test_split(temp_data, test_size=0.5, random_state=42)
 
 # Save splits
-with open("trvd_train.pkl", "wb") as f:
+with open("./dataset/trvd_train.pkl", "wb") as f:
     pickle.dump(train_data, f)
 
-with open("trvd_val.pkl", "wb") as f:
+with open("./dataset/trvd_val.pkl", "wb") as f:
     pickle.dump(val_data, f)
 
-with open("trvd_test.pkl", "wb") as f:
+with open("./dataset/trvd_test.pkl", "wb") as f:
     pickle.dump(test_data, f)

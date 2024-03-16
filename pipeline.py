@@ -61,6 +61,8 @@ class Pipeline:
         self.size = size
         trees = self.train
         self.w2v_path = 'subtrees/'+args.input+'/node_w2v_'+str(size)
+        if not os.path.exists('subtrees'):
+            os.mkdir('subtrees')
         if not os.path.exists('subtrees/'+args.input):
             os.mkdir('subtrees/'+args.input)
         from prepare_data import get_sequences
