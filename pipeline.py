@@ -85,7 +85,7 @@ class Pipeline:
             # training word2vec model
             from gensim.models.word2vec import Word2Vec
             print('corpus size: ', len(corpus))
-            w2v = Word2Vec(corpus, size=size, workers=96, sg=1, min_count=3)
+            w2v = Word2Vec(corpus, vector_size=size, workers=96, sg=1, min_count=3)
             print('word2vec : ', w2v)
             w2v.save(self.w2v_path)
 
@@ -93,14 +93,15 @@ class Pipeline:
         from prepare_data import get_blocks as func
         from gensim.models.word2vec import Word2Vec
         word2vec = Word2Vec.load('subtrees/trvd/node_w2v_128').wv
-        vocab = word2vec.vocab
+        # vocab = word2vec.vocab  -- deprecated
+        
         max_token = word2vec.vectors.shape[0]
 
         def tree_to_index(node):
             token = node.token
             if type(token) is bytes:
                 token = token.decode('utf-8')
-            result = [vocab[token].index if token in vocab else max_token]
+            result = [word2vec.key_to_index[token] if token in word2vec.key_to_index else max_token]
             children = node.children
             for child in children:
                 result.append(tree_to_index(child))
@@ -142,14 +143,14 @@ class Pipeline:
         from prepare_data import get_blocks as func
         from gensim.models.word2vec import Word2Vec
         word2vec = Word2Vec.load(self.w2v_path).wv
-        vocab = word2vec.vocab
+        # vocab = word2vec.vocab   -- deprecated
         max_token = word2vec.vectors.shape[0]
 
         def tree_to_index(node):
             token = node.token
             if type(token) is bytes:
                 token = token.decode('utf-8')
-            result = [vocab[token].index if token in vocab else max_token]
+            result = [word2vec.key_to_index[token] if token in word2vec.key_to_index else max_token]
             children = node.children
             for child in children:
                 result.append(tree_to_index(child))

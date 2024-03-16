@@ -16,7 +16,7 @@ def normalization(source):
         code = re.sub('/\\*.*?\\*/', '', code)
         code = clean_gadget([code])
         nor_code.append(code[0])
-        print(code[0])
+        # print(code[0])
     return nor_code
 
 
