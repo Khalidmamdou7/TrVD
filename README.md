@@ -11,6 +11,11 @@ We collect a dataset from Software Assurance Reference Dataset (SARD) ( https://
 
 ## Source
 
+### Step 0: Install the required packages
+```bash
+pip install -r requirements.txt
+```
+
 ### Step1:Code normalization
 Normalize the code with normalization.py
 ```
