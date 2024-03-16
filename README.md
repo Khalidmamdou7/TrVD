@@ -16,6 +16,13 @@ We collect a dataset from Software Assurance Reference Dataset (SARD) ( https://
 pip install -r requirements.txt
 ```
 
+### Step 0.1: Prepare the dataset
+```bash
+unzip ./dataset/dataset.zip -d ./dataset
+python3 ./partition_data.py
+mkdir ./dataset/mutrvd
+```
+
 ### Step1:Code normalization
 Normalize the code with normalization.py
 ```
