@@ -126,7 +126,7 @@ class Pipeline:
             for b in blocks:
                 btree = tree_to_index(b)
                 token_tree = tree_to_token(b)
-                print(token_tree)
+                # print(token_tree)
                 tree.append(btree)
             return tree
 
@@ -175,7 +175,7 @@ class Pipeline:
             for b in blocks:
                 btree = tree_to_index(b)
                 token_tree = tree_to_token(b)
-                print(token_tree)
+                # print(token_tree)
                 tree.append(btree)
             return tree
 
