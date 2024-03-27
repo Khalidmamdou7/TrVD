@@ -33,7 +33,7 @@ def parse_ast(source):
 
 def parse_ast_js(source):
 
-    JS_LANGUAGE = Language("build_languages/javascript.so", "javascript")
+    JS_LANGUAGE = Language("build_languages/my-languages.so", "javascript")
     parser = Parser()
     parser.set_language(JS_LANGUAGE)  # set the parser for certain language
     tree = parser.parse(source.encode("utf-8").decode("unicode_escape").encode())
