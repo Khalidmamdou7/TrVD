@@ -20,5 +20,5 @@ with open("./dataset/trvd_train.pkl", "wb") as f:
 with open("./dataset/trvd_val.pkl", "wb") as f:
     pickle.dump(val_data, f)
 
-with open("./dataset/trvd_test.pkl", "wb") as f:
-    pickle.dump(test_data, f)
+# with open("./dataset/trvd_test.pkl", "wb") as f:
+#     pickle.dump(test_data, f)
