@@ -138,6 +138,8 @@ def evaluation():
         all_preds += predicted.tolist()
         total += len(test_labels)
         total_loss += loss.item() * len(test_inputs)
+        print("predicted: ", predicted)
+        print("labels: ", test_labels)
 
     print("Testing results(Acc):", total_acc.item() / total)
     evaluate_multi(all_preds, all_labels)

@@ -81,7 +81,10 @@ def predict_output():
     while i < len(test_data):
         batch = get_batch(test_data, i, BATCH_SIZE)
         i += BATCH_SIZE
-        test_inputs, _ = batch
+        test_inputs, test_labels = batch
+        if USE_GPU:
+            test_inputs, test_labels = test_inputs, test_labels.to(device)
+
         test_inputs = [
             torch.tensor(inp) for inp in test_inputs
         ]  # Convert inputs to tensors
