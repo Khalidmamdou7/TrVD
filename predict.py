@@ -83,9 +83,12 @@ def predict_output():
         i += BATCH_SIZE
         test_inputs, _ = batch
         test_inputs = [
-            torch.tensor(inp).to(device) for inp in test_inputs
-        ]  # Convert inputs to tensor and move to GPU
-        model.batch_size = len(test_inputs)
+            torch.tensor(inp) for inp in test_inputs
+        ]  # Convert inputs to tensors
+        test_inputs = torch.stack(test_inputs).to(
+            device
+        )  # Stack tensors and move to GPU
+        model.batch_size = test_inputs.size(0)
         output = model(test_inputs)
         _, predicted = torch.max(output.data, 1)
         all_preds += predicted.tolist()
