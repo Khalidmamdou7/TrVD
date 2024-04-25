@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 with open("./dataset/dataset.pkl", "rb") as f:
     dataset = pickle.load(f)
 
-# Shuffle dataset
+# Shuffle dataset if necessary
 # Assuming dataset is a list or a pandas DataFrame
 # Shuffle if necessary, if not already shuffled
 
@@ -20,5 +20,5 @@ with open("./dataset/trvd_train.pkl", "wb") as f:
 with open("./dataset/trvd_val.pkl", "wb") as f:
     pickle.dump(val_data, f)
 
-# with open("./dataset/trvd_test.pkl", "wb") as f:
-#     pickle.dump(test_data, f)
+with open("./dataset/trvd_test.pkl", "wb") as f:
+    pickle.dump(test_data, f)

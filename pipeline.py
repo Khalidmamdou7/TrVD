@@ -64,10 +64,10 @@ class Pipeline:
         dev = pd.read_pickle("dataset/" + dataset + "/val.pkl")
 
         # parsing source source into ast
-        train["code"] = train["code"].apply(parse_ast)
+        train["code"] = train["code"].apply(parse_ast_js)
         self.train = train
         self.train_keep = copy.deepcopy(train)
-        dev["code"] = dev["code"].apply(parse_ast)
+        dev["code"] = dev["code"].apply(parse_ast_js)
         self.dev = dev
         self.dev_keep = copy.deepcopy(dev)
         test["code"] = test["code"].apply(parse_ast_js)
