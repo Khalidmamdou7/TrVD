@@ -14,11 +14,8 @@ def read_data_from_source(file_path):
 
 data = read_data_from_source("DatasetMadeBySeif.xlsx")
 
-
 # Splitting the data into features (X) and labels (y)
-X = data.drop(
-    columns=["label", "code"]
-)  # Assuming 'label' and 'code' are the columns containing the labels
+X = data.drop(columns=["label", "code"])
 y = data["code"]
 
 # Splitting the entire dataset into training, validation, and testing sets
