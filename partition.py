@@ -1,13 +1,9 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 import pickle
 
-import pandas as pd
-
 
 def read_data_from_source(file_path):
-
     data = pd.read_excel(file_path)
     return data
 
