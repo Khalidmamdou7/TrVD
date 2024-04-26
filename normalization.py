@@ -23,11 +23,9 @@ def normalization(source):
 
 
 def mutrvd():
-    train = pd.read_pickle("./dataset/trvd_train.pkl")[
-        0
-    ]  # Assuming the first element of the tuple is the DataFrame
-    test = pd.read_pickle("./dataset/trvd_test.pkl")[0]
-    val = pd.read_pickle("./dataset/trvd_val.pkl")[0]
+    train = pd.read_pickle("./dataset/trvd_train.pkl")
+    test = pd.read_pickle("./dataset/trvd_test.pkl")
+    val = pd.read_pickle("./dataset/trvd_val.pkl")
 
     train["code"] = normalization(train)
     if not os.path.exists("./dataset/mutrvd"):

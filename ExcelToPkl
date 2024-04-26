@@ -1,0 +1,13 @@
+import pandas as pd
+import os
+
+
+def excel_to_pickle(input_excel, output_pickle):
+    df = pd.read_excel(input_excel)
+    df.to_pickle(output_pickle)
+
+
+if __name__ == "__main__":
+    excel_to_pickle("train.xlsx", "trvd_train.pkl")
+    excel_to_pickle("val.xlsx", "trvd_val.pkl")
+    excel_to_pickle("test.xlsx", "trvd_test.pkl")
