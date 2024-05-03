@@ -23,20 +23,18 @@ def parse_options():
 
 
 def parse_ast(source):
-    # C_LANGUAGE = Language('build_languages/my-languages.so', 'c')
     CPP_LANGUAGE = Language("build_languages/my-languages.so", "cpp")
     parser = Parser()
-    parser.set_language(CPP_LANGUAGE)  # set the parser for certain language
-    tree = parser.parse(source.encode("utf-8").decode("unicode_escape").encode())
+    parser.set_language(CPP_LANGUAGE)
+    tree = parser.parse(source.encode("utf-8"))
     return tree
 
 
 def parse_ast_js(source):
-
     JS_LANGUAGE = Language("build_languages/my-languages.so", "javascript")
     parser = Parser()
-    parser.set_language(JS_LANGUAGE)  # set the parser for certain language
-    tree = parser.parse(source.encode("utf-8").decode("unicode_escape").encode())
+    parser.set_language(JS_LANGUAGE)
+    tree = parser.parse(source.encode("utf-8"))
     return tree
 
 
@@ -57,13 +55,11 @@ class Pipeline:
         self.size = None
         self.w2v_path = None
 
-    # parse source code
     def parse_source(self, dataset):
         train = pd.read_pickle("dataset/" + dataset + "/train.pkl")
         test = pd.read_pickle("dataset/" + dataset + "/test.pkl")
         dev = pd.read_pickle("dataset/" + dataset + "/val.pkl")
 
-        # parsing source source into ast
         train["code"] = train["code"].apply(parse_ast)
         self.train = train
         self.train_keep = copy.deepcopy(train)
@@ -74,7 +70,6 @@ class Pipeline:
         self.test = test
         self.test_keep = copy.deepcopy(test)
 
-    # construct dictionary and train word embedding
     def dictionary_and_embedding(self, size):
         self.size = size
         trees = self.train
@@ -88,14 +83,11 @@ class Pipeline:
         def trans_to_sequences(ast):
             sequence = []
             get_sequences(ast, sequence)
-            # collect all root-leaf paths
             paths = []
             get_root_paths(ast, paths, [])
-            # add root to leaf path as corpus
             paths.append(sequence)
             return paths
 
-        # train word2vec embedding if not exists
         if not os.path.exists(self.w2v_path):
             corpus = trees["code"].apply(trans_to_sequences)
             paths = []
@@ -107,7 +99,6 @@ class Pipeline:
                     ]
                     paths.append(path)
             corpus = paths
-            # training word2vec model
             from gensim.models.word2vec import Word2Vec
 
             print("corpus size: ", len(corpus))
@@ -120,8 +111,6 @@ class Pipeline:
         from gensim.models.word2vec import Word2Vec
 
         word2vec = Word2Vec.load("subtrees/trvd/node_w2v_128").wv
-        # vocab = word2vec.vocab  -- deprecated
-
         max_token = word2vec.vectors.shape[0]
 
         def tree_to_index(node):
@@ -157,13 +146,11 @@ class Pipeline:
             for b in blocks:
                 btree = tree_to_index(b)
                 token_tree = tree_to_token(b)
-                # print(token_tree)
                 tree.append(btree)
             return tree
 
         return trans2seq(data)
 
-    # generate block sequences with index representations
     def generate_block_seqs(self, data, name: str):
         blocks_path = None
         if name == "train":
@@ -177,7 +164,6 @@ class Pipeline:
         from gensim.models.word2vec import Word2Vec
 
         word2vec = Word2Vec.load(self.w2v_path).wv
-        # vocab = word2vec.vocab   -- deprecated
         max_token = word2vec.vectors.shape[0]
 
         def tree_to_index(node):
@@ -213,7 +199,6 @@ class Pipeline:
             for b in blocks:
                 btree = tree_to_index(b)
                 token_tree = tree_to_token(b)
-                # print(token_tree)
                 tree.append(btree)
             return tree
 
@@ -222,7 +207,6 @@ class Pipeline:
         trees.to_pickle(blocks_path)
         return trees
 
-    # run for processing raw to train
     def run(self, dataset):
         print("parse source code...")
         self.parse_source(dataset)
@@ -236,5 +220,5 @@ class Pipeline:
 
 if __name__ == "__main__":
     ppl = Pipeline()
-    print("Now precessing dataset: ", args.input)
+    print("Now processing dataset: ", args.input)
     ppl.run(args.input)
