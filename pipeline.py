@@ -63,7 +63,7 @@ class Pipeline:
         train["code"] = train["code"].apply(parse_ast)
         self.train = train
         self.train_keep = copy.deepcopy(train)
-        dev["code"] = dev["code"].apply(parse_ast)
+        dev["code"] = dev["code"].apply(parse_ast_js)
         self.dev = dev
         self.dev_keep = copy.deepcopy(dev)
         test["code"] = test["code"].apply(parse_ast_js)

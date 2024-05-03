@@ -300,9 +300,9 @@ keywords = frozenset(
 
 # input is a list of string lines
 def clean_gadget(gadget):
-    # dictionary; map d2a name to symbol name + number
+    # dictionary; map function names to symbol names + number
     fun_symbols = {}
-    # dictionary; map variable name to symbol name + number
+    # dictionary; map variable names to symbol names + number
     var_symbols = {}
 
     fun_count = 1
@@ -315,7 +315,7 @@ def clean_gadget(gadget):
     # regular expression to find JavaScript variable name candidates
     rx_var = re.compile(r"\bvar\s+([_$A-Za-z][\w$]*)\b")
 
-    # final cleaned gadget output to return to interface
+    # final cleaned gadget output to return
     cleaned_gadget = []
 
     for line in gadget:
