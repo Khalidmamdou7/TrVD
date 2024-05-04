@@ -9,43 +9,69 @@ from gensim.models.word2vec import Word2Vec
 from model import BatchProgramClassifier
 from torch.autograd import Variable
 
-def parse_options():
-    parser = argparse.ArgumentParser(description='TrVD training.')
-    parser.add_argument('-i', '--input', default='mutrvd', choices='mutrvd',
-                        help='training dataset type', type=str, required=False)
-    parser.add_argument('-m', '--model', default='rvnn-att', choices='rvnn-att',
-                        type=str, required=False, help='sub-tree model type')
 
-    parser.add_argument('-d', '--device', default='cuda', choices='cuda, cuda:1, cuda:2',
-                        type=str, required=False, help='GPU')
+def parse_options():
+    parser = argparse.ArgumentParser(description="TrVD training.")
+    parser.add_argument(
+        "-i",
+        "--input",
+        default="mutrvd",
+        choices="mutrvd",
+        help="training dataset type",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "-m",
+        "--model",
+        default="rvnn-att",
+        choices="rvnn-att",
+        type=str,
+        required=False,
+        help="sub-tree model type",
+    )
+
+    parser.add_argument(
+        "-d",
+        "--device",
+        default="cuda",
+        choices="cuda, cuda:1, cuda:2",
+        type=str,
+        required=False,
+        help="GPU",
+    )
     args = parser.parse_args()
     return args
 
 
 def get_batch(dataset, idx, bs):
-    tmp = dataset.iloc[idx: idx + bs]
+    tmp = dataset.iloc[idx : idx + bs]
     data, labels = [], []
     for _, item in tmp.iterrows():
-        data.append(item['code'])
-        labels.append(item['label'])
+        data.append(item["code"])
+        labels.append(item["label"])
     return data, torch.LongTensor(labels)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_options()
     embedding_size = 128
-    w2v_path = 'subtrees/' + args.input + '/node_w2v_' + str(embedding_size)
-    train_data = pd.read_pickle('subtrees/'+args.input+'/train_block.pkl')
-    val_data = pd.read_pickle('subtrees/'+args.input+'/dev_block.pkl')
+    w2v_path = "/kaggle/input/newadadad/node_w2v_128"
+    train_data = pd.read_pickle("/kaggle/input/newadadad/train_block.pkl")
+    val_data = pd.read_pickle("/kaggle/input/newadadad/dev_block.pkl")
+    test_data = pd.read_pickle("/kaggle/input/newadadad/test_block.pkl")
 
     # filter dataset for code is []
-    train_data = train_data.drop(train_data[train_data['code'].str.len() == 0].index)
-    val_data = val_data.drop(val_data[val_data['code'].str.len() == 0].index)
-    print('train: \n', train_data['label'].value_counts())
+    train_data = train_data.drop(train_data[train_data["code"].str.len() == 0].index)
+    val_data = val_data.drop(val_data[val_data["code"].str.len() == 0].index)
+    test_data = test_data.drop(test_data[test_data["code"].str.len() == 0].index)
+    print("train: \n", train_data["label"].value_counts())
 
     word2vec = Word2Vec.load(w2v_path).wv
-    embeddings = np.zeros((word2vec.vectors.shape[0] + 1, word2vec.vectors.shape[1]), dtype="float32")
-    embeddings[:word2vec.vectors.shape[0]] = word2vec.vectors
+    embeddings = np.zeros(
+        (word2vec.vectors.shape[0] + 1, word2vec.vectors.shape[1]), dtype="float32"
+    )
+    embeddings[: word2vec.vectors.shape[0]] = word2vec.vectors
 
     HIDDEN_DIM = 100
     ENCODE_DIM = 128
@@ -57,9 +83,18 @@ if __name__ == '__main__':
     EMBEDDING_DIM = word2vec.vectors.shape[1]
     device = torch.device(args.device if torch.cuda.is_available() else "cpu")
     print(device)
-    print('dataset:', args.input)
-    model = BatchProgramClassifier(EMBEDDING_DIM, HIDDEN_DIM, MAX_TOKENS + 1, ENCODE_DIM, LABELS, BATCH_SIZE,
-                                   device, USE_GPU, embeddings)
+    print("dataset:", args.input)
+    model = BatchProgramClassifier(
+        EMBEDDING_DIM,
+        HIDDEN_DIM,
+        MAX_TOKENS + 1,
+        ENCODE_DIM,
+        LABELS,
+        BATCH_SIZE,
+        device,
+        USE_GPU,
+        embeddings,
+    )
 
     if USE_GPU:
         model.to(device)
@@ -70,17 +105,17 @@ if __name__ == '__main__':
 
     best_val_loss = float("inf")
     best_val_acc = 0.0
-    model_path = 'saved_model/' + args.input + '/' + args.model
+    model_path = "saved_model/" + args.input + "/" + args.model
     if not os.path.exists(model_path):
         os.makedirs(model_path)
-    best_model = 'saved_model/best_' + args.input + '.pt'
+    best_model = "saved_model/best_" + args.input + ".pt"
 
     train_loss_ = []
     val_loss_ = []
     train_acc_ = []
     val_acc_ = []
     best_acc = 0.0
-    print('Start training...')
+    print("Start training...")
     # training procedure
     for epoch in range(EPOCHS):
         start_time = time.time()
@@ -112,9 +147,18 @@ if __name__ == '__main__':
 
         train_loss_.append(total_loss / total)
         train_acc_.append(total_acc.item() / total)
-        print('-' * 89)
-        print('| end of epoch {:3d} / {:3d} | time: {:5.2f}s | train loss {:5.2f} | ''train acc {:5.2f} | lr {:.8f}'
-              .format(epoch+1, EPOCHS, (time.time() - start_time), total_loss / total, total_acc.item() / total, scheduler.get_lr()[0]))
+        print("-" * 89)
+        print(
+            "| end of epoch {:3d} / {:3d} | time: {:5.2f}s | train loss {:5.2f} | "
+            "train acc {:5.2f} | lr {:.8f}".format(
+                epoch + 1,
+                EPOCHS,
+                (time.time() - start_time),
+                total_loss / total,
+                total_acc.item() / total,
+                scheduler.get_lr()[0],
+            )
+        )
 
         if val_data is not None:
             end_time = time.time()
@@ -147,19 +191,25 @@ if __name__ == '__main__':
                 total += len(test_labels)
                 total_loss += loss.item() * len(test_inputs)
 
-            from evaluation import  evaluate_multi
+            from evaluation import evaluate_multi
+
             evaluate_multi(all_preds, all_labels)
 
-            torch.save(model.state_dict(), model_path + '/model_'+str(epoch+1)+'.pt')
+            torch.save(
+                model.state_dict(), model_path + "/model_" + str(epoch + 1) + ".pt"
+            )
             if total_acc.item() / total > best_acc:
                 best_acc = total_acc.item() / total
-                print('saving best model')
+                print("saving best model")
                 torch.save(model.state_dict(), best_model)
-            print('| end of epoch {:3d} / {:3d} | time: {:5.2f}s | val loss {:5.2f} | val acc {:5.2f}'
-                  .format(epoch + 1, EPOCHS, (time.time() - end_time), total_loss / total, total_acc.item() / total))
-            print('-' * 89)
+            print(
+                "| end of epoch {:3d} / {:3d} | time: {:5.2f}s | val loss {:5.2f} | val acc {:5.2f}".format(
+                    epoch + 1,
+                    EPOCHS,
+                    (time.time() - end_time),
+                    total_loss / total,
+                    total_acc.item() / total,
+                )
+            )
+            print("-" * 89)
             scheduler.step()
-
-
-
-
