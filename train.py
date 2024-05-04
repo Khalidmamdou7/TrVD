@@ -77,7 +77,7 @@ if __name__ == "__main__":
     ENCODE_DIM = 128
     LABELS = 86
     EPOCHS = 100
-    BATCH_SIZE = 8
+    BATCH_SIZE = 2
     USE_GPU = True
     MAX_TOKENS = word2vec.vectors.shape[0]
     EMBEDDING_DIM = word2vec.vectors.shape[1]
