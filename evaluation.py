@@ -115,7 +115,7 @@ def evaluation():
     total_loss = 0.0
     total = 0.0
     i = 0
-    model.load_state_dict(torch.load("/kaggle/working/TrVD/saved_model/mutrvd/rvnn-att/model_1.pt", map_location=torch.device("cpu")))
+    model.load_state_dict(torch.load("/kaggle/working/TrVD/saved_model/mutrvd/rvnn-att/model_2.pt", map_location=torch.device("cpu")))
 
     model.to(device)
     model.eval()
