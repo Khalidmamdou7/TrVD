@@ -91,7 +91,7 @@ def evaluation():
     HIDDEN_DIM = 100
     ENCODE_DIM = 128
     LABELS = 86
-    BATCH_SIZE = 100
+    BATCH_SIZE = 2
     USE_GPU = True
     MAX_TOKENS = word2vec.vectors.shape[0]
     EMBEDDING_DIM = word2vec.vectors.shape[1]
