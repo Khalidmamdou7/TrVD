@@ -74,10 +74,15 @@ def evaluate_multi(all_pred, all_labels):
 def evaluation():
     args = parse_options()
     embedding_size = 128
-    test_data = pd.read_pickle("subtrees/" + args.input + "/test_block.pkl")
+
+    
+
+    test_data = pd.read_pickle("/kaggle/input/newadadad/test_block.pkl")
+    # test_data = pd.read_pickle("subtrees/" + args.input + "/test_block.pkl")
     test_data = test_data.drop(test_data[test_data["code"].str.len() == 0].index)
 
-    w2v_path = "subtrees/" + args.input + "/node_w2v_" + str(embedding_size)
+    w2v_path = "/kaggle/input/newadadad/node_w2v_128"
+    # w2v_path = "subtrees/" + args.input + "/node_w2v_" + str(embedding_size)
     word2vec = Word2Vec.load(w2v_path).wv
     embeddings = np.zeros(
         (word2vec.vectors.shape[0] + 1, word2vec.vectors.shape[1]), dtype="float32"
