@@ -56,10 +56,10 @@ def get_batch(dataset, idx, bs):
 if __name__ == "__main__":
     args = parse_options()
     embedding_size = 128
-    w2v_path = "/kaggle/input/newdatapart2/node_w2v_128"
-    train_data = pd.read_pickle("/kaggle/input/newdatapart2/train_block.pkl")
-    val_data = pd.read_pickle("/kaggle/input/newdatapart2/dev_block.pkl")
-    test_data = pd.read_pickle("/kaggle/input/newdatapart2/test_block.pkl")
+    w2v_path = "/kaggle/input/newnew/node_w2v_128"
+    train_data = pd.read_pickle("/kaggle/input/newnew/train_block.pkl")
+    val_data = pd.read_pickle("/kaggle/input/newnew/dev_block.pkl")
+    test_data = pd.read_pickle("/kaggle/input/newnew/test_block.pkl")
 
     # filter dataset for code is []
     train_data = train_data.drop(train_data[train_data["code"].str.len() == 0].index)
