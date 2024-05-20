@@ -76,7 +76,7 @@ def evaluation():
     embedding_size = 128
 
     
-    test_data = pd.read_pickle("/kaggle/input/newdatapart2/test_block.pkl")
+    test_data = pd.read_pickle("/kaggle/input/newnew/test_block.pkl")
     # test_data = pd.read_pickle("subtrees/" + args.input + "/test_block.pkl")
     test_data = test_data.drop(test_data[test_data["code"].str.len() == 0].index)
 
@@ -115,7 +115,8 @@ def evaluation():
     total_loss = 0.0
     total = 0.0
     i = 0
-    model.load_state_dict(torch.load("/kaggle/working/TrVD/saved_model/mutrvd/rvnn-att/model_3.pt", map_location=torch.device("cpu")))
+
+    model.load_state_dict(torch.load("/kaggle/working/TrVD/saved_model/best_mutrvd.pt", map_location=torch.device("cpu")))
 
     model.to(device)
     model.eval()
